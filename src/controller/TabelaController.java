@@ -24,14 +24,15 @@ public class TabelaController {
         Conexao c = new Conexao();
         calcularDados(jogo);
         
-        String sql = "insert into jogos (placar, minTemp, maxTemp, minRecorde, maxRecorde) values (?,?,?,?,?)";
+        String sql = "insert into jogos (idJogo, placar, minTemp, maxTemp, minRecorde, maxRecorde) values (?,?,?,?,?,?)";
         try{
             PreparedStatement sentenca = c.con.prepareStatement(sql);
-            sentenca.setInt(1,jogo.getPlacar());
-            sentenca.setInt(2,jogo.getMinTemp());
-            sentenca.setInt(3,jogo.getMaxTemp());
-            sentenca.setInt(4,jogo.getMinRecorde());
-            sentenca.setInt(5,jogo.getMaxRecorde());
+            sentenca.setInt(1,jogo.getIdJogo());
+            sentenca.setInt(2,jogo.getPlacar());
+            sentenca.setInt(3,jogo.getMinTemp());
+            sentenca.setInt(4,jogo.getMaxTemp());
+            sentenca.setInt(5,jogo.getMinRecorde());
+            sentenca.setInt(6,jogo.getMaxRecorde());
             
             if(!sentenca.execute())
                 retorno = true;
@@ -42,42 +43,40 @@ public class TabelaController {
         return retorno;
     }
     
-    public void calcularDados(TabelaModel tabela){
-        ArrayList<TabelaModel> todosItens = new ArrayList<>();
-        todosItens = selecionarTodosJogos();
+    public void calcularDados(TabelaModel jogo){
+        ArrayList<TabelaModel> todosJogos = new ArrayList<>();
+        todosJogos = selecionarTodosJogos();
 
         int cont = 0;
         int apoio = 0;
         int entrou = 0;
-        for (TabelaModel x:todosItens) {
+        for (TabelaModel x:todosJogos) {
             cont++;
         }
-        for (TabelaModel x:todosItens) {
+        for (TabelaModel x:todosJogos) {
             apoio++;
             if (cont == apoio){
-
-                if(tabela.getPlacar() < x.getMinTemp()){
-                  tabela.setMinTemp(tabela.getPlacar());
-                  tabela.setMaxTemp(x.getMaxTemp());
-                  tabela.setMinRecorde(x.getMinRecorde()+ 1);
-                  tabela.setMaxRecorde(x.getMaxRecorde());
+                if(jogo.getPlacar() < x.getMinTemp()){
+                  jogo.setMinTemp(jogo.getPlacar());
+                  jogo.setMaxTemp(x.getMaxTemp());
+                  jogo.setMinRecorde(x.getMinRecorde()+ 1);
+                  jogo.setMaxRecorde(x.getMaxRecorde());
                   entrou = 1;
                 }
-                if(tabela.getPlacar() > x.getMaxTemp()){
-                  tabela.setMinTemp(x.getMinTemp());
-                  tabela.setMaxTemp(tabela.getPlacar());
-                  tabela.setMinRecorde(x.getMinRecorde());
-                  tabela.setMaxRecorde(x.getMaxRecorde() + 1);
+                if(jogo.getPlacar() > x.getMaxTemp()){
+                  jogo.setMinTemp(x.getMinTemp());
+                  jogo.setMaxTemp(jogo.getPlacar());
+                  jogo.setMinRecorde(x.getMinRecorde());
+                  jogo.setMaxRecorde(x.getMaxRecorde() + 1);
                   entrou = 1;
                 }
                 if(entrou == 0){
-                  tabela.setMinTemp(x.getMinTemp());
-                  tabela.setMaxTemp(x.getMaxTemp());
-                  tabela.setMinRecorde(x.getMinRecorde());
-                  tabela.setMaxRecorde(x.getMaxRecorde()); 
+                  jogo.setMinTemp(x.getMinTemp());
+                  jogo.setMaxTemp(x.getMaxTemp());
+                  jogo.setMinRecorde(x.getMinRecorde());
+                  jogo.setMaxRecorde(x.getMaxRecorde()); 
                 }
-            } 
-
+            }
         }
     }
     
@@ -85,6 +84,7 @@ public class TabelaController {
     public boolean editarJogos(TabelaModel jogo){
         boolean retorno = false;
         Conexao c = new Conexao();
+
         String sql = "update jogos set placar = ? "
                 + "where idJogo = ?";
         try{
@@ -98,6 +98,7 @@ public class TabelaController {
         }
         return retorno;
     }
+    
     
     public boolean excluirJogo(TabelaModel jogo){
         boolean retorno = false;
