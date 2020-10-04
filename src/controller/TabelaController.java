@@ -18,6 +18,9 @@ import util.Conexao;
  * @author jvalv
  */
 public class TabelaController {
+
+    public TabelaController() {
+    }
     
     public boolean InserirJogos (TabelaModel jogo){
         boolean retorno = false;

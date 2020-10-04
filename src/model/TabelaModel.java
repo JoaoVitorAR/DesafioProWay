@@ -16,6 +16,8 @@ public class TabelaModel {
     private int maxTemp;
     private int minRecorde;
     private int maxRecorde;
+    
+    
 
     public int getIdJogo() {
         return idJogo;
